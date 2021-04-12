@@ -1,5 +1,7 @@
 # highest-number
 
+Visit [https://highest-number.herokuapp.com/](https://highest-number.herokuapp.com/) for the app
+
 ## Build Setup
 
 ```bash
