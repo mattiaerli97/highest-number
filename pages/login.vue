@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    test build
     <label v-if="JSON.parse($route.query.withRegister)" for="username"
       >Username:</label
     >
