@@ -88,3 +88,4 @@ sw.*
 
 yarn.lock*
 dist
+package-lock.json

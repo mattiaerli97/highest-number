@@ -97,7 +97,7 @@ export const actions = {
     })
   },
 
-  async checkUsername({ username }) {
+  async checkUsername({ commit }, { username }) {
     await usersCollection
       .where('username', '==', username)
       .get()
