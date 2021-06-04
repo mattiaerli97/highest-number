@@ -106,50 +106,55 @@ export default {
           .then((snapshot) => {
             const myFriends = snapshot.docs[0].data().friends
             let count = 0
-            myFriends.map((f) => {
-              count++
-              usersCollection
-                .where('username', '==', f)
-                .where('highScore', '!=', null)
-                .get()
-                .then((snap) => {
-                  if (snap.size > 0) {
-                    const obj = snap.docs[0].data()
-                    obj.username = trimElement(obj.username, 20)
-                    app.rows.push(obj)
-                  }
-                  count--
-                  if (count === 0) {
-                    usersCollection
-                      .where('username', '==', app.username)
-                      .where('highScore', '!=', null)
-                      .get()
-                      .then((s) => {
-                        if (s.size > 0) {
-                          const obj = s.docs[0].data()
-                          obj.username = trimElement(obj.username, 20)
-                          app.rows.push(obj)
-                        }
-                        app.rows.sort((a, b) =>
-                          a.highScore > b.highScore
-                            ? -1
-                            : b.highScore > a.highScore
-                            ? 1
-                            : 0
-                        )
-                        app.personalRecord = {
-                          position:
-                            app.rows.findIndex(
-                              (item) =>
-                                item.username === trimElement(app.username, 20)
-                            ) + 1,
-                          highScore: s.docs[0].data().highScore,
-                        }
-                        app.loadingStandings = false
-                      })
-                  }
-                })
-            })
+            if (myFriends.length > 0) {
+              myFriends.map((f) => {
+                count++
+                usersCollection
+                  .where('username', '==', f)
+                  .where('highScore', '!=', null)
+                  .get()
+                  .then((snap) => {
+                    if (snap.size > 0) {
+                      const obj = snap.docs[0].data()
+                      obj.username = trimElement(obj.username, 20)
+                      app.rows.push(obj)
+                    }
+                    count--
+                    if (count === 0) {
+                      usersCollection
+                        .where('username', '==', app.username)
+                        .where('highScore', '!=', null)
+                        .get()
+                        .then((s) => {
+                          if (s.size > 0) {
+                            const obj = s.docs[0].data()
+                            obj.username = trimElement(obj.username, 20)
+                            app.rows.push(obj)
+                          }
+                          app.rows.sort((a, b) =>
+                            a.highScore > b.highScore
+                              ? -1
+                              : b.highScore > a.highScore
+                              ? 1
+                              : 0
+                          )
+                          app.personalRecord = {
+                            position:
+                              app.rows.findIndex(
+                                (item) =>
+                                  item.username ===
+                                  trimElement(app.username, 20)
+                              ) + 1,
+                            highScore: s.docs[0].data().highScore,
+                          }
+                          app.loadingStandings = false
+                        })
+                    }
+                  })
+              })
+            } else {
+              app.loadingStandings = false
+            }
           })
       } else {
         this.getData()
