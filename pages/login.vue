@@ -13,7 +13,11 @@
     <input id="email" v-model="email" type="text" />
     <label for="password">Password:</label>
     <input id="password" v-model="password" type="password" />
+    <NuxtLink v-if="!JSON.parse($route.query.withRegister)" to="/recovery"
+      >Forgot password?</NuxtLink
+    >
     <div class="btns-login">
+      <button @click="returnHome">Home</button>
       <button
         v-if="JSON.parse($route.query.withRegister)"
         :disabled="loadingRegister"
@@ -26,7 +30,6 @@
         <p v-if="!loadingLogin">Login</p>
         <Loader v-else />
       </button>
-      <button @click="returnHome">Home</button>
     </div>
     <p v-if="errorMessage">Error: {{ errorMessage }}</p>
   </div>
@@ -113,27 +116,5 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  flex-direction: column;
-}
-.container > p {
-  margin-top: 32px;
-  font-size: 16px;
-  color: red;
-}
-label {
-  font-size: 40px;
-}
-input {
-  width: 80%;
-  font-size: 24px;
-  margin: 10px;
-  outline: none;
-}
-.btns-login {
-  margin-top: 20px;
-  justify-content: space-between;
-  width: 80%;
-  display: flex;
-}
+@import '../assets/auth.css';
 </style>
