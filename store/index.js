@@ -9,6 +9,7 @@ export const state = () => ({
   userId: null,
   loadingLogin: false,
   loadingAuthChanged: false,
+  loadingRecovery: false,
 })
 
 export const mutations = {
@@ -26,6 +27,9 @@ export const mutations = {
   },
   SET_LOADING_AUTH(state, loading) {
     state.loadingAuthChanged = loading
+  },
+  SET_LOADING_RECOVERY(state, loading) {
+    state.loadingRecovery = loading
   },
 }
 
@@ -107,5 +111,22 @@ export const actions = {
           throw { message: 'Usurname already exists.' }
         }
       })
+  },
+
+  recovery({ commit }, { email }) {
+    commit('SET_LOADING_RECOVERY', true)
+    return new Promise((resolve, reject) => {
+      firebase
+        .auth()
+        .sendPasswordResetEmail(email)
+        .then(() => {
+          commit('SET_LOADING_RECOVERY', false)
+          resolve()
+        })
+        .catch((error) => {
+          commit('SET_LOADING_RECOVERY', false)
+          reject(error)
+        })
+    })
   },
 }

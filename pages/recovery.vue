@@ -1,10 +1,18 @@
 <template>
   <div class="container">
     <label for="email">Enter recovery email:</label>
-    <input id="email" v-model="recoveryMail" type="text" />
+    <input
+      id="email"
+      v-model="recoveryMail"
+      type="text"
+      @keyup.enter="recovery"
+    />
     <div class="btns-login">
       <button @click="returnHome">Home</button>
-      <button @click="recovery">Reset</button>
+      <button :disabled="loadingRecovery" @click="recovery">
+        <p v-if="!loadingRecovery">Reset</p>
+        <Loader v-else />
+      </button>
     </div>
     <p v-if="errorMessage">Error: {{ errorMessage }}</p>
   </div>
@@ -18,6 +26,11 @@ export default {
       errorMessage: '',
     }
   },
+  computed: {
+    loadingRecovery() {
+      return this.$store.state.loadingRecovery
+    },
+  },
   methods: {
     returnHome() {
       this.$router.push({ name: 'index' })
@@ -25,10 +38,10 @@ export default {
     recovery() {
       this.$store
         .dispatch('recovery', {
-          email: this.email,
+          email: this.recoveryMail,
         })
         .then(() => {
-          // this.returnHome()
+          this.returnHome()
         })
         .catch((e) => {
           this.errorMessage = e.message

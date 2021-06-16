@@ -1,28 +1,20 @@
 <template>
   <div class="container">
-    <label v-if="JSON.parse($route.query.withRegister)" for="username"
-      >Username:</label
-    >
-    <input
-      v-if="JSON.parse($route.query.withRegister)"
-      id="username"
-      v-model="username"
-      type="text"
-    />
+    <label v-if="isRegister" for="username">Username:</label>
+    <input v-if="isRegister" id="username" v-model="username" type="text" />
     <label for="email">Email:</label>
     <input id="email" v-model="email" type="text" />
     <label for="password">Password:</label>
-    <input id="password" v-model="password" type="password" />
-    <NuxtLink v-if="!JSON.parse($route.query.withRegister)" to="/recovery"
-      >Forgot password?</NuxtLink
-    >
+    <input
+      id="password"
+      v-model="password"
+      type="password"
+      @keyup.enter="isRegister ? register() : login()"
+    />
+    <NuxtLink v-if="!isRegister" to="/recovery">Forgot password?</NuxtLink>
     <div class="btns-login">
       <button @click="returnHome">Home</button>
-      <button
-        v-if="JSON.parse($route.query.withRegister)"
-        :disabled="loadingRegister"
-        @click="register"
-      >
+      <button v-if="isRegister" :disabled="loadingRegister" @click="register">
         <p v-if="!loadingRegister">Register</p>
         <Loader v-else />
       </button>
@@ -53,6 +45,9 @@ export default {
     }
   },
   computed: {
+    isRegister() {
+      return JSON.parse(this.$route.query.withRegister)
+    },
     user() {
       return this.$store.state.user
     },
