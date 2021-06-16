@@ -1,24 +1,20 @@
 <template>
   <div class="container">
-    <label v-if="JSON.parse($route.query.withRegister)" for="username"
-      >Username:</label
-    >
-    <input
-      v-if="JSON.parse($route.query.withRegister)"
-      id="username"
-      v-model="username"
-      type="text"
-    />
+    <label v-if="isRegister" for="username">Username:</label>
+    <input v-if="isRegister" id="username" v-model="username" type="text" />
     <label for="email">Email:</label>
     <input id="email" v-model="email" type="text" />
     <label for="password">Password:</label>
-    <input id="password" v-model="password" type="password" />
+    <input
+      id="password"
+      v-model="password"
+      type="password"
+      @keyup.enter="isRegister ? register() : login()"
+    />
+    <NuxtLink v-if="!isRegister" to="/recovery">Forgot password?</NuxtLink>
     <div class="btns-login">
-      <button
-        v-if="JSON.parse($route.query.withRegister)"
-        :disabled="loadingRegister"
-        @click="register"
-      >
+      <button @click="returnHome">Home</button>
+      <button v-if="isRegister" :disabled="loadingRegister" @click="register">
         <p v-if="!loadingRegister">Register</p>
         <Loader v-else />
       </button>
@@ -26,7 +22,6 @@
         <p v-if="!loadingLogin">Login</p>
         <Loader v-else />
       </button>
-      <button @click="returnHome">Home</button>
     </div>
     <p v-if="errorMessage">Error: {{ errorMessage }}</p>
   </div>
@@ -50,6 +45,9 @@ export default {
     }
   },
   computed: {
+    isRegister() {
+      return JSON.parse(this.$route.query.withRegister)
+    },
     user() {
       return this.$store.state.user
     },
@@ -113,27 +111,5 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  flex-direction: column;
-}
-.container > p {
-  margin-top: 32px;
-  font-size: 16px;
-  color: red;
-}
-label {
-  font-size: 40px;
-}
-input {
-  width: 80%;
-  font-size: 24px;
-  margin: 10px;
-  outline: none;
-}
-.btns-login {
-  margin-top: 20px;
-  justify-content: space-between;
-  width: 80%;
-  display: flex;
-}
+@import '../assets/auth.css';
 </style>

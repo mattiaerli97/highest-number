@@ -17,7 +17,7 @@ button {
   padding: 10px 30px;
 }
 
-div, input, p, button, h1, label {
+div, input, p, button, h1, label, a {
   font-family:
     'Quicksand',
     'Source Sans Pro',
